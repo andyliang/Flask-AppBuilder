@@ -1,3 +1,7 @@
+admin/123
+741557138@qq.com
+
+
 Base Skeleton to start your application using Flask-AppBuilder
 --------------------------------------------------------------
 

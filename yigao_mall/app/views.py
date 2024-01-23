@@ -1,8 +1,6 @@
 from flask import render_template
-from flask_appbuilder.models.sqla.interface import SQLAInterface
-from flask_appbuilder import ModelView, ModelRestApi
 
-from . import appbuilder, db
+from . import appbuilder
 
 """
     Create your Model based REST API::
@@ -45,6 +43,3 @@ def page_not_found(e):
         ),
         404,
     )
-
-
-db.create_all()
