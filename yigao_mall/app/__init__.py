@@ -5,6 +5,7 @@ from flask_appbuilder import AppBuilder, SQLA
 from flask_appbuilder.menu import Menu
 #from flask_migrate import Migrate
 from flask_cors import CORS
+from .sec import MySecurityManager
 
 """
  Logging configuration
@@ -27,7 +28,7 @@ db = SQLA(app)
 
 #重新改变初始化首页
 from .index import MyIndexView
-appbuilder = AppBuilder(app, db.session, indexview=MyIndexView,menu=Menu(reverse=True),base_template='mybase.html')
+appbuilder = AppBuilder(app, db.session, security_manager_class=MySecurityManager,indexview=MyIndexView,menu=Menu(reverse=True),base_template='mybase.html')
 
 """
 from sqlalchemy.engine import Engine
@@ -45,6 +46,9 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
 from . import models
 from . import views
 # from . import apis
+
+#2、创建所有model到数据库
+db.create_all()
 
 # 全文检索数据库
 '''

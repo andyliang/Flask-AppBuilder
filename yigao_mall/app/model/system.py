@@ -4,7 +4,7 @@ from flask_appbuilder import Model,CompactCRUDMixin
 from flask_appbuilder.models.mixins import AuditMixin
 from sqlalchemy import Column, Integer, String,Sequence
 from flask_appbuilder.security.sqla.models import User
-from sqlalchemy import Column, Date, DateTime, ForeignKey, Integer, String
+from sqlalchemy import Column, Date, DateTime, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import relationship
 import datetime
 
@@ -35,6 +35,14 @@ class Comp(Model):
     def __repr__(self):
         return self.comp_name
 
+assoc_user_company = Table(
+    "ab_user_company",
+    Model.metadata,
+    Column("id", Integer, primary_key=True),
+    Column("company_id", Integer, ForeignKey("company.id")),
+    Column("myuser_id", Integer, ForeignKey("ab_user.id")),
+)
+
 #用户扩展，需要手工创建自动和外键
 class MyUser(User):
     __tablename__ = "ab_user"
@@ -43,6 +51,8 @@ class MyUser(User):
     comp_id_fk = Column(Integer, ForeignKey("comp.id"), nullable=True)
     comp = relationship("Comp")
     order_no = Column(Integer, comment='排序')
+    emp_number = Column(String(150))
+    companies = relationship("Company", secondary=assoc_user_company, backref="MyUser")
 
 class UserDepartment(Model):
     __tablename__ = "ab_user_department"

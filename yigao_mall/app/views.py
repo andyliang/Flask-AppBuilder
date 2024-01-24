@@ -2,6 +2,20 @@ from flask import render_template
 
 from . import appbuilder
 
+from .view.sec_user import CompanyModelView,GroupModelView,ContactModelView
+
+appbuilder.add_view(CompanyModelView, "Companys", icon="fa-folder-open-o")
+appbuilder.add_view(
+    GroupModelView,
+    "List Groups",
+    icon="fa-folder-open-o",
+    category="Contacts",
+    category_icon="fa-envelope",
+)
+appbuilder.add_view(
+    ContactModelView, "List Contacts", icon="fa-envelope", category="Contacts"
+)
+
 """
     Create your Model based REST API::
 
