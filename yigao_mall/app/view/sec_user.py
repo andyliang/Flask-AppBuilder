@@ -1,8 +1,12 @@
 from flask import g
+from flask_babel import lazy_gettext
+
 from flask_appbuilder import ModelView
 from flask_appbuilder.models.filters import BaseFilter
 from flask_appbuilder.models.sqla.filters import get_field_setup_query
 from flask_appbuilder.models.sqla.interface import SQLAInterface
+
+from flask_appbuilder.security.registerviews import RegisterUserDBView
 
 from ..model.sec import Company, Contact, ContactGroup
 from ..sec_views import UserDBModelView
@@ -58,5 +62,14 @@ class GroupModelView(ModelView):
 
 class CompanyModelView(ModelView):
     datamodel = SQLAInterface(Company)
-    list_columns = ["name", "myuser"]
+    list_columns = ["name", "MyUser"]
     related_views = [UserDBModelView]
+
+
+class MyRegisterUserDBView(RegisterUserDBView):
+    email_template = 'register_mail.html'
+    email_subject = lazy_gettext('Your Account activation')
+    activation_template = 'activation.html'
+    form_title = lazy_gettext('Fill out the registration form')
+    error_message = lazy_gettext('Not possible to register you at the moment, try again later')
+    message = lazy_gettext('Registration sent to your email')

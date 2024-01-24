@@ -51,6 +51,24 @@ AUTH_TYPE = AUTH_DB
 # The default user self registration role
 # AUTH_USER_REGISTRATION_ROLE = "Public"
 
+# --------------------------------------
+# User registration
+AUTH_USER_REGISTRATION = True
+AUTH_USER_REGISTRATION_ROLE = "Public"
+# Config for Flask-WTF Recaptcha necessary for user registration
+RECAPTCHA_PUBLIC_KEY = "6LedRP0SAAAAAOF03Nsv_ny2NzOF_Dthe_Xn269v"  #example中的密码
+RECAPTCHA_PRIVATE_KEY = "6LedRP0SAAAAAPnsdEKgj5VU1QbFcPv7mO8cW0So" #example中的密码
+
+# Config for Flask-Mail necessary for user registration
+MAIL_PORT = 25
+MAIL_USE_SSL = False
+MAIL_SERVER = "smtp.qq.com"
+MAIL_USE_TLS = True
+MAIL_USERNAME = "741557138@qq.com"
+MAIL_PASSWORD = "mokyxtcnunoobebe"
+MAIL_DEFAULT_SENDER = "741557138@qq.com"
+# --------------------------------------
+
 # When using LDAP Auth, setup the ldap server
 # AUTH_LDAP_SERVER = "ldap://ldapserver.new"
 

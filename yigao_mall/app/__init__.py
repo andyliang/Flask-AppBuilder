@@ -7,12 +7,16 @@ from flask_appbuilder.menu import Menu
 from flask_cors import CORS
 from .sec import MySecurityManager
 
+#解决全局CERTIFICATE_VERIFY_FAILED
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
+
 """
  Logging configuration
 """
 
 logging.basicConfig(format="%(asctime)s:%(levelname)s:%(name)s:%(message)s")
-logging.getLogger().setLevel(logging.DEBUG)
+logging.getLogger().setLevel(logging.ERROR)
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True) #lhz add support cors
