@@ -67,9 +67,12 @@ class CompanyModelView(ModelView):
 
 
 class MyRegisterUserDBView(RegisterUserDBView):
-    email_template = 'register_mail.html'
+    #自定义用户注册模版
+    form_template = 'user/register.html'
+
+    email_template = 'user/register_mail.html'
     email_subject = lazy_gettext('Your Account activation')
-    activation_template = 'activation.html'
+    activation_template = 'user/activation.html'
     form_title = lazy_gettext('Fill out the registration form')
     error_message = lazy_gettext('Not possible to register you at the moment, try again later')
     message = lazy_gettext('Registration sent to your email')

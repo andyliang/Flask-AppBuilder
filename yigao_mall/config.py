@@ -27,7 +27,7 @@ CSRF_ENABLED = True
 APP_NAME = "壹高书画"
 
 # Uncomment to setup Setup an App icon
-# APP_ICON = "static/img/logo.jpg"
+# APP_ICON = "/static/img/logo.png"  #前面要加上/
 
 # ----------------------------------------------------
 # AUTHENTICATION CONFIG
@@ -38,6 +38,14 @@ APP_NAME = "壹高书画"
 # AUTH_LDAP : Is for LDAP
 # AUTH_REMOTE_USER : Is for using REMOTE_USER from web server
 AUTH_TYPE = AUTH_DB
+
+# Uncomment to setup OpenID providers example for OpenID authentication
+# OPENID_PROVIDERS = [
+#    { 'name': 'Yahoo', 'url': 'https://me.yahoo.com' },
+#    { 'name': 'AOL', 'url': 'http://openid.aol.com/<username>' },
+#    { 'name': 'Flickr', 'url': 'http://www.flickr.com/<username>' },
+#    { 'name': 'MyOpenID', 'url': 'https://www.myopenid.com' }]
+
 
 # Uncomment to setup Full admin role name
 # AUTH_ROLE_ADMIN = 'Admin'
@@ -72,17 +80,11 @@ MAIL_DEFAULT_SENDER = "741557138@qq.com"
 # When using LDAP Auth, setup the ldap server
 # AUTH_LDAP_SERVER = "ldap://ldapserver.new"
 
-# Uncomment to setup OpenID providers example for OpenID authentication
-# OPENID_PROVIDERS = [
-#    { 'name': 'Yahoo', 'url': 'https://me.yahoo.com' },
-#    { 'name': 'AOL', 'url': 'http://openid.aol.com/<username>' },
-#    { 'name': 'Flickr', 'url': 'http://www.flickr.com/<username>' },
-#    { 'name': 'MyOpenID', 'url': 'https://www.myopenid.com' }]
 # ---------------------------------------------------
 # Babel config for translations
 # ---------------------------------------------------
 # Setup default language
-BABEL_DEFAULT_LOCALE = "en"
+BABEL_DEFAULT_LOCALE = "zh"
 # Your application default translation path
 BABEL_DEFAULT_FOLDER = "translations"
 # The allowed translation for you app
@@ -120,9 +122,12 @@ IMG_UPLOAD_URL = "/static/uploads/"
 # APP_THEME = "cyborg.css"
 # APP_THEME = "flatly.css"
 # APP_THEME = "journal.css"
-# APP_THEME = "readable.css"
+APP_THEME = "readable.css"
 # APP_THEME = "simplex.css"
 # APP_THEME = "slate.css"
 # APP_THEME = "spacelab.css"
 # APP_THEME = "united.css"
 # APP_THEME = "yeti.css"
+
+#解决告警FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will be disabled by default in the future.
+SQLALCHEMY_TRACK_MODIFICATIONS = True

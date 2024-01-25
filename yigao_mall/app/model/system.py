@@ -8,6 +8,7 @@ from sqlalchemy import Column, Date, DateTime, ForeignKey, Integer, String, Tabl
 from sqlalchemy.orm import relationship
 import datetime
 
+
 class Comp(Model):
     __tablename__ = 'comp'
     id = Column(Integer,Sequence('comp_seq'),primary_key=True,comment='主键',autoincrement=True)
@@ -21,7 +22,7 @@ class Comp(Model):
         primaryjoin="and_(Comp.comp_type_id==SystemDict.id)",
     )
     reg_date = Column(Date,comment='注册日期')
-    comp_myusers = relationship('MyUser', backref='userscomp') #此条加上会影响主次视图
+    # comp_myusers = relationship('MyUser', backref='userscomp') #此条加上会影响主次视图
 
     #关联tags,#此条加上会影响主次视图，另外，关联显示存在问题
     # tags = relationship(
