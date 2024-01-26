@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship
 #系统日志及字典
 from .model.system import Comp,MyUser,SystemLog,SystemDict,UserDepartment,SystemDictComponent,SystemDictRole
 from .model.sec import Company, Contact, ContactGroup
+from .model.business_base_model import Category,CategorySecond,Product,Comment,ShopCart,Order,OrderItem
 
 """
 

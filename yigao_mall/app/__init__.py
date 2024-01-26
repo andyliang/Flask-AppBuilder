@@ -49,7 +49,7 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
 
 from . import models
 from . import views
-# from . import apis
+from . import apis
 
 #2、创建所有model到数据库
 db.create_all()

@@ -2,12 +2,11 @@ from time import strftime
 
 from flask_appbuilder import Model,CompactCRUDMixin
 from flask_appbuilder.models.mixins import AuditMixin
-from sqlalchemy import Column, Integer, String,Sequence
+from sqlalchemy import Column, Integer, String, Sequence
 from flask_appbuilder.security.sqla.models import User
 from sqlalchemy import Column, Date, DateTime, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import relationship
 import datetime
-
 
 class Comp(Model):
     __tablename__ = 'comp'
