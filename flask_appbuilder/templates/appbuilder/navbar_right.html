@@ -40,6 +40,6 @@
 {% else %}
     <li><a href="{{appbuilder.get_url_for_login}}">
     <i class="fa fa-fw fa-sign-in"></i>{{_("Login")}}</a></li>
-    <li><a href="{{url_for('%s.%s' % ('MyRegisterUserDBView', 'this_form_get'))}}">
-    <i class="fa fa-fw fa-sign-in"></i>{{_("Register")}}</a></li>
+{#    <li><a href="{{url_for('%s.%s' % ('MyRegisterUserDBView', 'this_form_get'))}}">#}
+{#    <i class="fa fa-fw fa-sign-in"></i>{{_("Register")}}</a></li>#}
 {% endif %}

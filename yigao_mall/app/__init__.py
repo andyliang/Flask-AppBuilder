@@ -6,6 +6,7 @@ from flask_appbuilder.menu import Menu
 #from flask_migrate import Migrate
 from flask_cors import CORS
 from .sec import MySecurityManager
+from sqlalchemy.sql import text
 
 #解决全局CERTIFICATE_VERIFY_FAILED
 import ssl
@@ -50,6 +51,8 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
 from . import models
 from . import views
 from . import apis
+from . import widgets
+from . import tool
 
 #2、创建所有model到数据库
 db.create_all()

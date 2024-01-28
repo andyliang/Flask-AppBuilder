@@ -1,7 +1,13 @@
+from flask import g
+from flask import Markup, url_for
 from flask_appbuilder import Model
 from sqlalchemy import Column, Date, DateTime, ForeignKey, Integer, String, Table,Float,Text
 from sqlalchemy.orm import relationship,backref
+from sqlalchemy.ext.declarative import declared_attr
 import datetime
+
+from flask_appbuilder.filemanager import ImageManager
+from flask_appbuilder.models.mixins import ImageColumn
 
 # 一级类别
 class Category(Model):
@@ -44,23 +50,72 @@ class Product(Model):
     pname = Column(String(255), nullable=False)
     old_price = Column(Float, nullable=False)
     new_price = Column(Float, nullable=False)
-    images = Column(Text)
+    counts = Column(Integer, nullable=False)
+    head_img = Column(ImageColumn(thumbnail_size=(30, 30, True), size=(300, 300, True)))
+    images = Column(ImageColumn(thumbnail_size=(30, 30, True), size=(300, 300, True)))
     pDesc = Column(Text)
-    head_img = Column(Text)
     is_hot = Column(Integer, default=0)  # 0不是热卖品，1热卖品 2推广品
     is_sell = Column(Integer, default=1)  # 0销完 1在售
     is_pass = Column(Integer, default=0)  # 0正在审核 1审核未通过 2 审核通过
     pdate = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
     click_count = Column(Integer, default=0)
-    counts = Column(Integer, nullable=False)
     love_user = Column(Text)  # 喜爱的人
-    uid = Column(Integer, ForeignKey("ab_user.id",ondelete='cascade'))
+    # uid = Column(Integer, ForeignKey("ab_user.id",ondelete='cascade'))
     myuser = relationship("MyUser", backref=backref('products', order_by=pdate.desc()))  #排序
     csid = Column(Integer, ForeignKey("category_second.id", ondelete='cascade'))
     category_second = relationship("CategorySecond", backref=backref("products", order_by=pdate.desc()))
 
     def __repr__(self):
         return self.pname
+
+    @classmethod
+    def get_user_id(cls):
+        try:
+            return g.user.id
+        except Exception:
+            return None
+
+    @declared_attr
+    def uid(cls):
+        return Column(
+            Integer, ForeignKey("ab_user.id"), default=cls.get_user_id, nullable=False
+        )
+
+    def head_img_href(self):
+        im = ImageManager()
+        if self.head_img:
+            return Markup(
+                '<a href="' +
+                url_for("ProductGridModelView.show", pk=str(self.id)) +
+                '" class="thumbnail" style="border:0px !important"><img src="' +
+                im.get_url(self.head_img) +
+                '" alt="Photo" class="img-rounded img-responsive"></a>'
+            )
+        else:
+            return Markup(
+                '<a href="' +
+                url_for("ProductGridModelView.show", pk=str(self.id)) +
+                '" class="thumbnail" style="border:0px !important"><img src="/static/img/no_pic.png" alt="暂无作品" class="img-responsive">'
+                '</a>'
+            )
+
+    def head_img_href_thumbnail(self):
+        im = ImageManager()
+        if self.head_img:
+            return Markup(
+                '<a href="' +
+                url_for("ProductGridModelView.show", pk=str(self.id)) +
+                '" class="thumbnail" style="border:0px !important"><img src="' +
+                im.get_url_thumbnail(self.head_img) +
+                '" alt="Photo" class="img-rounded img-responsive"></a>'
+            )
+        else:
+            return Markup(
+                '<a href="' +
+                url_for("ProductGridModelView.show", pk=str(self.id)) +
+                '" class="thumbnail" style="border:0px !important"><img src="/static/img/no_pic.png" alt="暂无作品" class="img-responsive">'
+                '</a>'
+            )
 
     def product_json(self):
         product_json = {}
