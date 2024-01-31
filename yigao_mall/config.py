@@ -131,3 +131,6 @@ APP_THEME = "bootstrap-theme.css"  # default bootstrap
 
 #解决告警FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will be disabled by default in the future.
 SQLALCHEMY_TRACK_MODIFICATIONS = True
+
+# 是否允许访问菜单API，默认为False
+FAB_ADD_MENU_API = False
