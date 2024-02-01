@@ -38,6 +38,7 @@
             //喜欢
             $('.loveit').click(function () {
                 alert('请输入关键字！');
+                {#
                 var form = $('#modal_form')[0];
                 var formdata = new FormData(form);
                 var data = $('#modal_form').serialize();
@@ -47,20 +48,21 @@
                     alert('请输入关键字！');
                     return; //返回
                 }
+                 #}
                 {#alert(data);#}
                 {#alert(get_form_action);#}
                 $.ajax({
                     type: 'post',
-                    url: get_form_action,
+                    url: '/api/v1/productrestapi/love_this_product/1',
                     dataType: 'json',
-                    data: formdata,
+                    data: '',
                     async: false,
                     cache: false,
                     contentType: false,
                     processData: false,
                     success: function (data) {
                         if (data.result_code == 0) {
-                            //alert(data.result.total);
+                            alert(data.result.total);
                             var table = $('#search_result');
                             var search_total_sum = $('#search_total_sum');
                             var hide_total_sum = $('#hide_total_sum');
@@ -141,8 +143,16 @@
                             alert('未知异常!');
                         }
                     },
-                    error: function (data) {
-                        alert('系统响应出错，请检查或重新登录！');
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        {#alert("请求对象XMLHttpRequest: "+XMLHttpRequest);#}
+			            {#alert("错误类型textStatus: "+textStatus);#}
+			            {#alert("异常对象errorThrown: "+errorThrown);#}
+                        if (XMLHttpRequest.status == 401){
+                            {#alert(401);#}
+                            window.location.href = '/login';
+                        }else {
+                            alert('系统响应出错，请检查或重新登录！');
+                        }
                     }
                 });
                 $('#modal-submit').blur(); //恢复按钮状态

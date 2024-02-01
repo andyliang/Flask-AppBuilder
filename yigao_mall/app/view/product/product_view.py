@@ -64,8 +64,8 @@ class ProductGridModelView(ModelView):
 
     base_permissions = ['can_list','can_show']
 
-    list_columns = ['head_img_href','myuser','pname','old_price','new_price']
-    label_columns = {'myuser':'作者','pname':'作品名称','old_price':'原价','new_price':'促销价'}
+    list_columns = ['head_img_href','love_user_count','myuser','pname','old_price','new_price']
+    label_columns = {'love_user_count':'喜欢的人','myuser':'作者','pname':'作品名称','old_price':'原价','new_price':'促销价'}
 
     show_columns = ['head_img_href','myuser','pname','old_price','new_price',
                     ]

@@ -20,21 +20,32 @@ class ProductModelApi(ModelRestApi):
 class ProductRestApi(BaseApi):
     resource_name = 'productrestapi' #注意资源名要用小写
 
-    @expose('/love_this_product', methods=['POST'])
+    @expose('/love_this_product/<string:pk>', methods=['POST'])
     @protect(allow_browser_login=True)
-    def love_this_product(self):
-        ids = json.loads(request.data)['ids']
+    def love_this_product(self,pk):
+        tmp = pk
         try:
+            # 查询当前用户是否在喜欢的人列表中
+
+
             delete_sql = "update department set status=-1,change_datetime='" + now_str + "'" + " where id in (%s)" % ids
             db.session.execute(delete_sql)
             db.session.commit()
+
             resp = dict()
-            resp["msg"] = "删除成功！"
-            # resp["code1"] = 200  #由于响应本身具有status状态，因此这个code字段可以不填
+            resp["result_code"] = 0
+            resp["message"] = "success"
+            resp["result"] = {
+                "data": 0,
+            }
             return self.response(200, **resp)
+
         except Exception as e:
             db.session.rollback()
             resp = dict()
-            resp["msg"] = "删除出现异常:" + str(e)
-            resp["code1"] = 500  # 由于响应500状态，因此这个code1字段需要填写
+            resp["result_code"] = -1
+            resp["message"] = "failed"
+            resp["result"] = {
+                "data": str(e),
+            }
             return self.response(200, **resp)

@@ -81,6 +81,12 @@ class Product(Model):
             Integer, ForeignKey("ab_user.id"), default=cls.get_user_id, nullable=False
         )
 
+    def love_user_count(self):
+        if '@' in self.love_user:
+            return self.love_user.count('@') / 2 #每个用户格式@userid@
+        else:
+            return 0
+
     def head_img_href(self):
         im = ImageManager()
         if self.head_img:
