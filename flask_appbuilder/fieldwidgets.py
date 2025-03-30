@@ -61,8 +61,9 @@ class DateTimePickerWidget:
 class BS3TextFieldWidget(widgets.TextInput):
     def __call__(self, field, **kwargs):
         kwargs["class"] = "form-control"
-        if field.label:
-            kwargs["placeholder"] = field.label.text
+        # lhz uncomment the following 2 line
+        # if field.label:
+        #     kwargs["placeholder"] = field.label.text
         if "name_" in kwargs:
             field.name = kwargs["name_"]
         return super(BS3TextFieldWidget, self).__call__(field, **kwargs)
@@ -71,17 +72,20 @@ class BS3TextFieldWidget(widgets.TextInput):
 class BS3TextAreaFieldWidget(widgets.TextArea):
     def __call__(self, field, **kwargs):
         kwargs["class"] = "form-control"
-        kwargs["rows"] = 3
-        if field.label:
-            kwargs["placeholder"] = field.label.text
+        kwargs["rows"] = 5 #lhz modify from 3 to 5
+        kwargs["onscroll"] = u"this.rows++;"  # lhz add to controll the rows
+        # lhz uncomment the following 2 line
+        # if field.label:
+        #     kwargs["placeholder"] = field.label.text
         return super(BS3TextAreaFieldWidget, self).__call__(field, **kwargs)
 
 
 class BS3PasswordFieldWidget(widgets.PasswordInput):
     def __call__(self, field, **kwargs):
         kwargs["class"] = "form-control"
-        if field.label:
-            kwargs["placeholder"] = field.label.text
+        # lhz uncomment the following 2 line
+        # if field.label:
+        #     kwargs["placeholder"] = field.label.text
         return super(BS3PasswordFieldWidget, self).__call__(field, **kwargs)
 
 

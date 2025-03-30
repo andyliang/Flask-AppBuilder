@@ -642,12 +642,20 @@ class BaseModelView(BaseView):
     def _get_search_widget(self, form=None, exclude_cols=None, widgets=None):
         exclude_cols = exclude_cols or []
         widgets = widgets or {}
+        # lhz add get_fieldsets start
+        get_fieldsets = None
+        try:
+            get_fieldsets = self.search_fieldsets
+        except:
+            pass
+        # lhz add get_fieldsets end
         widgets["search"] = self.search_widget(
             route_base=self.route_base,
             form=form,
             include_cols=self.search_columns,
             exclude_cols=exclude_cols,
             filters=self._filters,
+            fieldsets=get_fieldsets,  # lhz add fieldsets,用来支持自定义字段
         )
         return widgets
 
@@ -693,6 +701,10 @@ class BaseCRUDView(BaseModelView):
         A list of columns (or model's methods) to be displayed on the list view.
         Use it to control the order of the display
     """
+    widths_columns = None #lhz add
+    '''
+        #LHZ ADD TO CONTROLL THE WIDTH OF THE LIST FIELDS
+    '''
     show_columns = None
     """
         A list of columns (or model's methods) to be displayed on the show view.
@@ -1090,6 +1102,7 @@ class BaseCRUDView(BaseModelView):
         widgets["list"] = self.list_widget(
             label_columns=self.label_columns,
             include_columns=self.list_columns,
+            widths_columns=self.widths_columns,  # LHZ ADD TO CONTROL THE WIDTH OF THE LIST FIELDS
             value_columns=self.datamodel.get_values(lst, self.list_columns),
             order_columns=self.order_columns,
             formatters_columns=self.formatters_columns,
