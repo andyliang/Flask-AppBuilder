@@ -3,6 +3,8 @@
 
 {% block content %}
 {{ lib.panel_begin(title) }}
+    <!--20250329 LHZ ADD message show -->
+    <span style="color: red;margin-left: 20px;font-weight: bold" id="model_message" hidden="hidden"></span>
 
     {% block list_search scoped %}
         {% call lib.accordion_tag("accordion1",_("Search"), False) %}

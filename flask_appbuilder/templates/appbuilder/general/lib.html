@@ -420,3 +420,51 @@
             })
     </script>
 {% endmacro %}
+
+{# lhz add:模态窗口头部 #}
+{% macro panel_modal_begin(title, extra_class="") %}
+<div class="panel panel-primary {{ extra_class }}">
+    <div class="panel-heading" style="height: 38px;">
+        <div style="float:left;width: max-content">
+            <h4 id="linkModalLabel" class="panel-title" text-align="left" style="width: auto; alignment: left;">{{title}}</h4>
+        </div>
+        <div style="float:right;width: max-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                <span aria-hidden="true" style="color: white;">x</span>
+            </button>
+        </div>
+    </div>
+  <div class="panel-body">
+{% endmacro %}
+{# lhz add:模态窗口尾部 #}
+{% macro panel_modal_end() %}
+  </div>
+</div>
+{% endmacro %}
+
+{# lhz 专门用于查询条件 #}
+{% macro render_field_search2(field,filter_type,begin_sep_label='', end_sep_label='', begin_sep_field='', end_sep_field='') %}
+      {% if field.id != 'csrf_token' %}
+          {% if field.type == 'HiddenField' %}
+            {{ field}}
+          {% else %}
+            {{begin_sep_label|safe}}
+                <label for="{{field.id}}" control-label>
+                    {{ field.label.text }}
+                </label>
+            {{end_sep_label|safe}}
+            {{begin_sep_field|safe}}
+                {#20240328原来的内容，会报错： {{ field(name_='_flt_' ~filter_type~ '_' + field.name) }} #}
+                {{ field(**kwargs)|safe }}
+               <span class="help-block">{{ field.description }}</span>
+          {% endif %}
+          {% if field.errors %}
+            <div class="alert alert-danger">
+            {% for error in field.errors %}
+              {{ _(error) }}
+            {% endfor %}
+            </div>
+          {% endif %}
+            {{end_sep_field|safe}}
+      {% endif %}
+{% endmacro %}
