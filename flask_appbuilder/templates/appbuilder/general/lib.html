@@ -328,7 +328,9 @@
         {% endif %}
     {% endif %}
     {{ render_actions(actions, modelview_name) }}
-    {{ lnk_back() }}
+    {% if list_back_btn %} {# lhz add 当有配置返回按钮时，才显示 #}
+        {{ lnk_back() }}
+    {% endif %}
     <div class="pull-right">
         <strong>{{ _('Record Count') }}:</strong> {{ count }}
     </div>

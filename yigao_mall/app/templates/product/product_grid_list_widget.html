@@ -1,0 +1,168 @@
+{% extends 'appbuilder/general/widgets/base_list.html' %}
+
+{% block list_header %}
+    {{ super() }}
+    {{ lib.render_dropdown_orderby(order_columns, label_columns, modelview_name) }}
+{% endblock %}
+
+{% block begin_loop_values %}
+    {{ super() }}
+    {% for item in value_columns %}
+        {% set pk = pks[loop.index-1] %}
+            <div class="product_hot_item">
+                <div class="thumbnail">
+                  {# lhz 屏蔽操作 #}
+{#                {% if actions %}#}
+{#                    <input id="{{pk}}" class="action_check" name="rowid" value="{{pk}}" type="checkbox">#}
+{#                {% endif %}#}
+{#                {{ lib.btn_crud(can_show, can_edit, can_delete, pk, modelview_name, filters) }}#}
+                <dl>
+                {% for col_name in include_columns %}
+                    {% set col_label = label_columns.get(include_columns[loop.index -1]) %}
+                    {% set value = item[col_name] %}
+                        <dd>
+                            {% if col_label != 'Head Img Href' %}
+                                <b>{{col_label}}:</b>
+                            {% endif %}
+                            {{ item[col_name] }}</dd>
+                {% endfor %}
+                <span class="loveit">i love it</span>
+                </dl>
+                </div>
+            </div>
+
+    {% endfor %}
+
+    <script>
+        $(document).ready(function() {
+            //喜欢
+            $('.loveit').click(function () {
+                alert('请输入关键字！');
+                {#
+                var form = $('#modal_form')[0];
+                var formdata = new FormData(form);
+                var data = $('#modal_form').serialize();
+                var keywords = $('#keywords').val();
+                if (keywords == ''){
+                    $('#modal-submit').blur();
+                    alert('请输入关键字！');
+                    return; //返回
+                }
+                 #}
+                {#alert(data);#}
+                {#alert(get_form_action);#}
+                $.ajax({
+                    type: 'post',
+                    url: '/api/v1/productrestapi/love_this_product/1',
+                    dataType: 'json',
+                    data: '',
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data.result_code == 0) {
+                            alert(data.result.total);
+                            var table = $('#search_result');
+                            var search_total_sum = $('#search_total_sum');
+                            var hide_total_sum = $('#hide_total_sum');
+                            var search_result_div = $('search_result_div');
+                            var search_result_tab = $('#search_result_tab tr');
+                            var search_result_requirement = $('#search_result_requirement');
+                            var search_result_requirement_detail = $('#search_result_requirement_detail');
+                            var search_result_task_detail = $('#search_result_task_detail');
+                            var search_result_version = $('#search_result_version');
+
+                            if (data.result.total == 0){
+                                search_total_sum.text('未搜索到数据！');
+                                hide_total_sum.text('');
+                                search_result_tab.children().remove();
+                                search_result_requirement.children().remove();
+                                search_result_requirement_detail.children().remove();
+                                search_result_task_detail.children().remove();
+                                search_result_version.children().remove();
+                            }else {
+                                search_total_sum.text('本次共搜索到'+data.result.total+'条数据。');
+                                hide_total_sum.text('隐藏');
+
+                                //依次处理各个业务对象
+                                search_result_tab.children().remove();
+                                for (var each in data.result.result_list) {
+                                    //对象英文名，不同的对象，使用不同的table显示
+                                    var obj_name = data.result.result_list[each][0];
+
+                                    //清空对象原内容
+                                    eval('search_result_'+obj_name).children().remove();
+
+                                    //显示标签
+                                    search_result_tab.append('<td onclick="show_this_table('+'search_result_'+obj_name+',this);">'+data.result.result_list[each][1]+'</td>');
+
+                                    //表头列名
+                                    var th_col_name = '';
+                                    th_col_name = th_col_name + '<thead>';
+                                    for (var i in data.result.result_list[each][2]){
+                                        th_col_name = th_col_name + '<th>'+data.result.result_list[each][2][i]+'</th>';
+                                    }
+                                    th_col_name = th_col_name + '</thead>';
+                                    eval('search_result_'+obj_name).append(th_col_name);
+
+                                    //表格数据
+                                    var td_data = ''
+                                    var cols = data.result.result_list[each][2].length;
+                                    for (var j in data.result.result_list[each][3]){
+                                        td_data = td_data + '<tbody><tr>';
+                                        for (x = 0; x < cols; x++){
+                                            if (x == 0){
+                                                td_data = td_data + '<td>'+data.result.result_list[each][3][j][x]+'</td>'; //第一列内容都是标题，可以允许自由换行
+                                            }else {
+                                                td_data = td_data + '<td><pre>'+data.result.result_list[each][3][j][x]+'</pre></td>';
+                                            }
+
+                                        }
+                                        td_data = td_data + '</tr></tbody>';
+                                    }
+                                    eval('search_result_'+obj_name).append(td_data);
+                                }
+                                //初始化选中第一个标签
+                                var all_tables = $("#search_result_tab tbody tr td");
+                                all_tables[0].click();
+                            }
+                        }
+                        else if(data.result_code == -1) {
+                            var message_type = typeof data.message;
+                            if (message_type == "object") {
+                                for (x in data.message) {
+                                    $('#' + x).next().text(data.message[x]);
+                                }
+                            } else {
+                                $("#modal_message").text(data.message);
+                                $("#modal_message").removeAttr("hidden");
+                            }
+                        }
+                        else {
+                            alert('未知异常!');
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        {#alert("请求对象XMLHttpRequest: "+XMLHttpRequest);#}
+			            {#alert("错误类型textStatus: "+textStatus);#}
+			            {#alert("异常对象errorThrown: "+errorThrown);#}
+                        if (XMLHttpRequest.status == 401){
+                            {#alert(401);#}
+                            window.location.href = '/login';
+                        }else {
+                            alert('系统响应出错，请检查或重新登录！');
+                        }
+                    }
+                });
+                $('#modal-submit').blur(); //恢复按钮状态
+                $('#search_result_div').removeAttr('style','display:none');//搜索按钮点击完成后，要恢复查询结果区域
+
+                return false; //防止模态表单自动提交
+            });
+        });
+    </script>
+
+{% endblock %}
+
+

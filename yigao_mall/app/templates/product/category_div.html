@@ -1,0 +1,15 @@
+<div class="category_area">
+    {% for each in category %}
+        <div class="category">
+        {{ each[0]}} - {{each[1]}} {# cid - cname #}
+            <br>
+            {% for eachdetailid in each[2].split(',') %}
+                {% set csids = each[2].split(',') %}
+                {% set csnames = each[3].split(',') %}
+                <div class="category_second">
+                {{ csids[loop.index-1] }} - {{ csnames[loop.index-1] }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>

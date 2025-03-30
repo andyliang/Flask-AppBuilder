@@ -106,7 +106,7 @@ class RegisterUserDBForm(DynamicForm):
         validators=[EqualTo("password", message=lazy_gettext("Passwords must match"))],
         widget=BS3PasswordFieldWidget(),
     )
-    recaptcha = RecaptchaField()
+    # recaptcha = RecaptchaField() #lhz 屏蔽图片验证码
 
 
 class RegisterUserOIDForm(DynamicForm):

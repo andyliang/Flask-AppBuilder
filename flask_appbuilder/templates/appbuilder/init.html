@@ -30,6 +30,43 @@
       <link href="{{url_for('appbuilder.static',filename='css/select2/select2-bootstrap.min.css')}}" rel="stylesheet">
       <link href="{{url_for('appbuilder.static',filename='css/flags/flags16.css')}}" rel="stylesheet">
       <link href="{{url_for('appbuilder.static',filename='css/ab.css')}}" rel="stylesheet">
+        <!--lhz add 定义外层容器的宽度、通用样式-->
+        <style type="text/css">
+        .container{
+            width: 99% !important;
+        }
+
+        div.category_area {
+            float: left; /*会给后面的div留出空间，与后面的保持并排*/
+            width: fit-content;
+            margin-left: 1%;
+            clear: left;
+            padding: 0px 6px;
+            border-style: solid;
+            border-radius: 3px;
+            border-image: initial;
+            border-width: 1px;
+            border-color: #e7e7e7;
+        }
+
+        .category{
+            {#float: left;  #} /*子元素设置这个，会影响父元素的高度*/
+            clear: left;
+            font-size: 13px;
+            font-weight: bold;
+            color: rebeccapurple;
+            white-space: nowrap; /*父换行*/
+            line-height: 2; /*元素行高是字体大小的倍数，控制元素的行间距*/
+        }
+
+        .category_second{
+            display: inline; /*子不换行*/
+            font-weight: normal;
+            color: black;
+            padding-left: 10px;
+        }
+
+        </style>
     {% endblock %}
 
     {% block head_js %}

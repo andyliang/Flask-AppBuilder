@@ -1,0 +1,39 @@
+{% extends "mybase.html" %}
+
+{% block head_css %}
+    {{ super() }}
+    <style type="text/css">
+        .product_hot_grid{
+            float: left;
+            width: 70%;
+            margin-left: 5px;
+        }
+
+        .product_hot_item{
+            width: 20%;
+            float: left;
+            margin-left: 2px;
+        }
+
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    {# 作品分类 #}
+    {% include 'product/category_div.html' %}
+
+    {# 热销作品 #}
+    <div class="product_hot_grid">
+    {% block product_grid_list %}
+        {{ widgets.get('list')()|safe }}
+    {% endblock %}
+    </div>
+
+
+
+
+{% endblock %}
+
+
+

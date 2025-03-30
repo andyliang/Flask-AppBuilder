@@ -1,28 +1,27 @@
-
 {% macro locale_menu(languages) %}
-{% set locale = session['locale'] %}
-{% if not locale %}
-    {% set locale = 'en' %}
-{% endif %}
-{% if languages.keys()|length > 1 %}
-<li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-       <div class="f16"><i class="flag {{languages[locale].get('flag')}}"></i><b class="caret"></b>
-       </div>
-    </a>
-    <ul class="dropdown-menu">
+    {% set locale = session['locale'] %}
+    {% if not locale %}
+        {% set locale = 'en' %}
+    {% endif %}
+    {% if languages.keys()|length > 1 %}
     <li class="dropdown">
-        {% for lang in languages %}
-            {% if lang != locale %}
-                <a tabindex="-1" href="{{appbuilder.get_url_for_locale(lang)}}">
-                  <div class="f16"><i class="flag {{languages[lang].get('flag')}}"></i> - {{languages[lang].get('name')}}
-                </div></a>
-            {% endif %}
-        {% endfor %}
-        </li>
-        </ul>
-</li>
-{% endif %}
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+           <div class="f16"><i class="flag {{languages[locale].get('flag')}}"></i><b class="caret"></b>
+           </div>
+        </a>
+        <ul class="dropdown-menu">
+        <li class="dropdown">
+            {% for lang in languages %}
+                {% if lang != locale %}
+                    <a tabindex="-1" href="{{appbuilder.get_url_for_locale(lang)}}">
+                      <div class="f16"><i class="flag {{languages[lang].get('flag')}}"></i> - {{languages[lang].get('name')}}
+                    </div></a>
+                {% endif %}
+            {% endfor %}
+            </li>
+            </ul>
+    </li>
+    {% endif %}
 {% endmacro %}
 
 
@@ -41,4 +40,6 @@
 {% else %}
     <li><a href="{{appbuilder.get_url_for_login}}">
     <i class="fa fa-fw fa-sign-in"></i>{{_("Login")}}</a></li>
+{#    <li><a href="{{url_for('%s.%s' % ('MyRegisterUserDBView', 'this_form_get'))}}">#}
+{#    <i class="fa fa-fw fa-sign-in"></i>{{_("Register")}}</a></li>#}
 {% endif %}
