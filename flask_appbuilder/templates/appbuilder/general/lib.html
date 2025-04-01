@@ -370,14 +370,27 @@
     </button>
 {% endmacro %}
 
-{% macro lnk_back() %}
-    <a href="{{url_for('UtilView' + '.back')}}" class="btn btn-sm btn-default" data-toggle="tooltip" rel="tooltip"
+{# lhz 屏蔽原来的方法 #}
+{#{% macro lnk_back() %}#}
+{#    <a href="{{url_for('UtilView' + '.back')}}" class="btn btn-sm btn-default" data-toggle="tooltip" rel="tooltip"#}
+{#       title="{{_('Back')}}">#}
+{#        <span class="sr-only">{{ _('Back') }}</span>#}
+{#        <i class="fa fa-arrow-left"></i>#}
+{#    </a>#}
+{#{% endmacro %}#}
+
+{# lhz 增加新的参数 #}
+{% macro lnk_back(back_url) %}
+    {% if back_url %}
+        {% set back_url = back_url %}
+    {% else %}
+        {% set back_url = url_for('UtilView' + '.back') %}
+    {% endif %}
+    <a href="{{ back_url }}" class="btn btn-sm btn-default" data-toggle="tooltip" rel="tooltip"
        title="{{_('Back')}}">
-        <span class="sr-only">{{ _('Back') }}</span>
         <i class="fa fa-arrow-left"></i>
     </a>
 {% endmacro %}
-
 
 {% macro lnk_add(my_href) %}
     <a href="{{my_href}}" class="btn btn-sm btn-primary" data-toggle="tooltip" rel="tooltip"
@@ -469,4 +482,142 @@
           {% endif %}
             {{end_sep_field|safe}}
       {% endif %}
+{% endmacro %}
+
+{# lhz:为列表提供操作按钮，提供模态窗、超链接、确认框三种模式入口 #}
+{% macro lnk_actions(actions,modelview_name,pk) %}
+    {% for action_key in actions %}
+        {% set action = actions.get(action_key) %}
+        {% if action.single == True and 'link' not in action.name %} {# 表示允许单个操作的确认框 #}
+            {% set url = '/' + modelview_name | lower + '/action/' + action.name+ '/' ~pk~ ''%}
+            <a href="javascript:void(0)"
+               class="btn btn-sm btn-default confirm" rel="tooltip" title="{{_(action.text)}}"
+               onclick="var a = new AdminActions(); return a.execute_single('{{ url }}','{{ action.confirmation }}');">
+                {#<i class="fa {{action.icon}}"></i>#}
+                {{ _(action.text) }}
+            </a>
+        {% endif %}
+        {% if 'link_modal_' in action.name%} {# 表示模态超链接 #}
+            {% set url = action.confirmation ~pk~ ''%}
+            <a href="javascript:void(0)" data-target="{{ url }}"
+               class="btn btn-sm btn-default link_modal" rel="tooltip" title="{{_(action.text)}}">
+                {#<i class="fa {{action.icon}}"></i>#}
+                {{ _(action.text) }}
+            </a>
+        {% endif %}
+        {% if 'link_' in action.name and 'link_modal_' not in action.name%} {# 表示非模态超链接 #}
+            {% set url = action.confirmation ~pk~ ''%}
+            <a href="{{url}}" class="btn btn-sm btn-default" rel="tooltip" title="{{_(action.text)}}">
+                {#<i class="fa {{action.icon}}"></i>#}
+                {{ _(action.text) }}
+            </a>
+        {% endif %}
+    {% endfor %}
+
+    <div class="modal fade" id="linkModal" tabindex="-1" role="dialog" aria-labelledby="linkModalLabel">
+        <div class="modal-dialog" role="document">
+            <input type="text" id="modal-title" value="" hidden="hidden"/>
+            <input type="text" id="form-action" value="" hidden="hidden"/>
+            <div class="modal-content">
+                {# 以下内容会被自动替换 #}
+            {#                <div class="modal-header">#}
+            {#                    <button type="button" class="close" data-dismiss="modal" aria-label="close">#}
+            {#                        <span aria-hidden="true">x</span>#}
+            {#                    </button>#}
+            {#                    <h4 class="modal-title" id="linkModalLabel">New message</h4>#}
+            {#                </div>#}
+            {#                <form>#}
+            {#                <div class="modal-body">#}
+            {#                        <div class="form-group">#}
+            {#                            <input type="hidden" name="un" class="form-control" id="vm_user" value="">#}
+            {#                            <label for="message-text" class="control-label">用户名：</label>#}
+            {#                            <input type="text" name="newname" class="form-control" id="user" value="" disabled>#}
+            {#                        </div>#}
+            {#                        <div class="form-group">#}
+            {#                            <label for="message-text" class="control-label">新密码：</label>#}
+            {#                            <input type="password" name="password" class="form-control" id="message-text" placeholder="新密码">#}
+            {#                        </div>#}
+            {##}
+            {#                </div>#}
+            {#                <div class="modal-footer">#}
+            {#                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>#}
+            {#                    <button type="submit" class="btn btn-primary" value="save" name="sub">保存</button>#}
+            {#                </div>#}
+            {#                </form>#}
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $(".link_modal").on('click',function () {
+                {#alert('模态框警告');#}
+                var height = window.innerHeight;
+                var item_height = 500;
+                var top = (height-item_height) / 3;
+                if (top<0){
+                    top = 0;
+                }
+                var url = this.getAttribute("data-target");
+                var title = this.getAttribute("data-original-title");
+                {#alert(url);#}
+                $("#linkModal").css("top",top + "px");
+                $("#linkModal").modal({
+                    remote: url
+                });
+                $("#linkModal").find('#modal-title').val(title);
+                $("#linkModal").find('#form-action').val(url);
+                {#$("#linkModal").modal("show");#}
+            });
+
+            $("#linkModal").on("hidden.bs.modal", function() {
+                // 这个#showModal是模态框的id
+                $(this).removeData("bs.modal");
+                $(this).find(".modal-content").children().remove();
+            });
+        });
+    </script>
+{% endmacro %}
+
+{# lhz 专门用于列表操作 #}
+{% macro btn_list_opers(can_show, can_edit, can_delete, actions, pk, modelview_name, filters) %}
+    <div class="btn-group btn-group-xs" style="display: flex;">
+        {% if can_show %}
+            {% set endpoint = modelview_name + '.show' %}
+            {% set path = endpoint | safe_url_for(pk=pk) %}
+            {% if path %}
+                {% set path = path | set_link_filters(filters) %}
+                {{ lnk_show(path) }}
+            {% endif %}
+        {% endif %}
+        {% if can_edit %}
+            {% set endpoint = modelview_name + '.edit' %}
+            {% set path = endpoint | safe_url_for(pk=pk) %}
+            {% if path %}
+                {% set path = path | set_link_filters(filters) %}
+                {{ lnk_edit(path) }}
+            {% endif %}
+        {% endif %}
+        {% if can_delete %}
+            {% set endpoint = modelview_name + '.delete' %}
+            {% set path = endpoint | safe_url_for(pk=pk) %}
+            {% if path %}
+                {{ lnk_delete(path) }}
+            {% endif %}
+        {% endif %}
+        {% if actions %} {# 更多自定义的操作入口 #}
+            {{ lnk_actions(actions,modelview_name,pk) }}
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{# lhz 专门用于ajax操作 #}
+{% macro render_form_ajaxsubmit_controls(back_url) %}
+    <div class="well well-sm">
+        {{ lnk_back(back_url) }}
+        <span class="btn  btn-sm btn-primary ajax-submit">{{_("Save")}}
+            </span>
+        {# 如果是button，form会自动提交 #}
+    </div>
 {% endmacro %}
