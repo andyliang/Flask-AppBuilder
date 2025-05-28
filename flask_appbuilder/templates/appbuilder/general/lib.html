@@ -9,6 +9,7 @@
     {% endif %}
 {% endmacro %}
 
+{# 详情界面的操作按钮 #}
 {% macro render_action_links(actions, pk, modelview_name) %}
     {% set actions = actions | get_actions_on_show(modelview_name) %}
     {% for key in actions %}
@@ -365,6 +366,11 @@
 {% endmacro %}
 
 {% macro btn_search() %}
+    {# lhz add begain#}
+    <button type="reset" class="btn btn-sm btn-primary">{{_("重置")}}
+        <i class="fa"></i>
+    </button>
+    {# lhz add end#}
     <button type="submit" class="btn  btn-sm btn-primary">{{_("Search")}}
         <i class="fa fa-search"></i>
     </button>
@@ -620,4 +626,12 @@
             </span>
         {# 如果是button，form会自动提交 #}
     </div>
+{% endmacro %}
+
+{# lhz add 模态窗口的查询按钮 #}
+{% macro btn_modal_post_search() %}
+    <span type="reset" class="btn  btn-sm btn-primary modal-post-reset">{{_("重置")}}
+            </span> {# 如果是button，form会自动提交 #}
+    <span type="submit" class="btn  btn-sm btn-primary modal-post-submit" id="modal_search">{{_("查询")}} {# 增加ID便于定位并自动点击 #}
+            </span> {# 如果是button，form会自动提交 #}
 {% endmacro %}
