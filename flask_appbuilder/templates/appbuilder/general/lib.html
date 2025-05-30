@@ -475,8 +475,8 @@
                 </label>
             {{end_sep_label|safe}}
             {{begin_sep_field|safe}}
-                {#20240328原来的内容，会报错： {{ field(name_='_flt_' ~filter_type~ '_' + field.name) }} #}
-                {{ field(**kwargs)|safe }}
+                {#20240328原来的内容，会报错：#} {{ field(name_='_flt_' ~filter_type~ '_' + field.name) }}
+                {# 原来的内容： {{ field(**kwargs)|safe }} #}
                <span class="help-block">{{ field.description }}</span>
           {% endif %}
           {% if field.errors %}
