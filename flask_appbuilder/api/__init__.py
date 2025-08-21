@@ -775,6 +775,20 @@ class BaseApi(AbstractViewApi):
         resp.headers["Content-Type"] = "application/json; charset=utf-8"
         return resp
 
+    @staticmethod
+    def response_cn(code: int, **kwargs: Any) -> Response:
+        """
+        Generic HTTP JSON response method
+
+        :param code: HTTP code (int)
+        :param kwargs: Data structure for response (dict)
+        :return: HTTP Json response
+        """
+        _ret_json = json.dumps(kwargs, ensure_ascii=False)
+        resp = make_response(_ret_json, code)
+        resp.headers["Content-Type"] = "application/json; charset=utf-8"
+        return resp
+
     def response_400(self, message: str = None) -> Response:
         """
         Helper method for HTTP 400 response
